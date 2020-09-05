@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+
+import netifaces
+
+ifaces = netifaces.interfaces()
+hardware_name = next(iface for iface in ifaces if "e" in iface)
+
+addresses = netifaces.ifaddresses(hardware_name)
+
+internet_up = netifaces.AF_INET in addresses
+
+icon = "y"
+
+if not internet_up:
+    print("<span font='SexyFont'>{}</span>".format(icon))
+    exit(33)
+
+
+text = "<span color=\"lightgreen\"><span font='SexyFont'>{}</span></span>".format(icon)
+print(text)
+print(text)

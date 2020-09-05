@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+from common import get_bars_as_text, get_color
+
+BRIGHTNESS_VALUE = 100
+MIN_BRIGHTNESS = 50
+MAX_BRIGHTNESS = 820
+
+ICON = u"\uf185"
+
+ICONS = ['a','k','l','J','K','L','M']
+
+with open("/sys/class/backlight/intel_backlight/brightness") as f:
+    brightness = int(f.read())
+    changed = True
+    
+    if "up" in sys.argv:
+        brightness += BRIGHTNESS_VALUE
+    elif "down" in sys.argv:
+        brightness -= BRIGHTNESS_VALUE
+    elif "reset" in sys.argv:
+        result = os.popen("sudo chmod 777 /sys/class/backlight/intel_backlight/brightness").read()
+        print(result)
+        print("Command executed")
+        import sys
+        sys.exit()
+    else:
+        changed = False
+
+    if changed:
+        if brightness < MIN_BRIGHTNESS: brightness = MIN_BRIGHTNESS
+        if brightness > MAX_BRIGHTNESS: brightness = MAX_BRIGHTNESS
+
+        f.close()
+        with open("/sys/class/backlight/intel_backlight/brightness","w") as g:
+            try:
+                g.write(str(brightness))
+            except Exception:
+                pass
+
+    percentage = ( float(brightness) / MAX_BRIGHTNESS ) * 100
+    index = int(percentage / (101. / len(ICONS)))
+    icon = ICONS[index]
+
+    text = u"<span font='SexyFont'>{}</span>".format(icon)
+    print(text)
+    print(text)
+    print(get_color(100-percentage, skip_bg=True))

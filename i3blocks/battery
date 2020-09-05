@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+#
+# A battery indicator blocklet script for i3blocks
+# Depends on acpi CLI
+
+from subprocess import check_output
+from sys import exit
+import sys
+from common import get_color
+
+if len(sys.argv) > 1:
+    bat = int(sys.argv[1])
+else:
+    bat = 0
+
+status = check_output(['acpi'], universal_newlines=True)
+
+if not status:
+    # stands for no battery found
+    fulltext = "<span color='red'>Battery not found</span>"
+    percentleft = 100
+else:
+    status = status.split("\n")[bat]
+    state = status.split(": ")[1].split(", ")[0]
+    commasplitstatus = status.split(", ")
+    percentleft = int(commasplitstatus[1].rstrip("%\n"))
+
+    FA_PLUG = "<span font='SexyFont'>g</span>"
+
+    fulltext = ""
+    timeleft = ""
+
+    if state == "Discharging":
+        time = commasplitstatus[-1].split()[0]
+        time = ":".join(time.split(":")[0:2])
+        timeleft = " ({})".format(time)
+    elif state == "Full":
+        fulltext = FA_PLUG + " "
+    elif state == "Unknown":
+        fulltext = "" 
+    else:
+        fulltext = FA_PLUG + " "
+
+   
+    def text(percentage):
+        _BATTERY_LEVELS = ["u", "t", "s", "r", "p"]
+        _BATTERY_FULL =   "p"
+        _BATTERY_EMPTY = 'q'
+        
+        icon = ""
+        if percentage <= 5:
+            icon = _BATTERY_EMPTY
+        elif percentage < 10:
+            icon = _BATTERY_LEVELS[0]
+        elif percentage < 25:
+            icon = _BATTERY_LEVELS[1]
+        elif percentage < 50:
+            icon = _BATTERY_LEVELS[2]
+        elif percentage < 85:
+            icon = _BATTERY_LEVELS[3]
+        elif percentage > 98:
+            icon = _BATTERY_FULL    
+        else:
+            icon = _BATTERY_LEVELS[4]
+        return "<span font='SexyFont'>{}</span>".format(icon)
+    form = "<span color=\"{}\">{}</span>"
+    fulltext += form.format(get_color(percentleft), text(percentleft))
+#    fulltext += timeleft
+
+print(fulltext)
+print(fulltext)
+if percentleft < 10:
+    exit(33)
+

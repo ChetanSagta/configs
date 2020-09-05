@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+
+import getpass
+import socket
+
+color = "#aaaaaa"
+user_color = "#aaffaa"
+host_color = "#ccddff"
+
+text = "<span color='{}'><span color='{}'>{}</span>@<span color='{}'>{}</span></span>"
+
+user = getpass.getuser()
+hostname = socket.gethostname()
+
+out = text.format(color, user_color, user, host_color, hostname)
+
+print(out)
+print(out)

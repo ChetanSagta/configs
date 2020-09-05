@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import os 
+import sys
+from common import get_color
+
+_DEFAULT_DEV_NAME = "wlp4s0"
+
+dev_name = _DEFAULT_DEV_NAME if len(sys.argv) <= 1 else sys.argv[1]
+
+cmd = "grep %s /proc/net/wireless | awk '{ print int($3 * 100 / 70) }'"%(dev_name)
+
+result = os.popen(cmd).read().replace("\n","")
+
+icons = ['D','C','B','A','z']
+
+try:
+    ratio = int(result)
+except Exception:
+    # Wifi down
+    print("<span font='SexyFont'>{}</span>".format(icons[0]))
+    ratio = 0
+
+index = int( ratio / (101.0 / len(icons)))
+icon = icons[index]
+
+text = u"<span font='SexyFont'>{}</span>".format(icon)
+print(text)
+print(text)
+
+print(get_color(ratio))
+
+if ratio == 0:
+    exit(33)

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+	then
+		# using default format
+		export FORMAT="%l:%M %p"
+	else
+		export FORMAT=$1	
+fi
+
+if [ -z ${BLOCK_BUTTON+x} ]; then export BLOCK_BUTTON=1; fi
+
+
+case $BLOCK_BUTTON in
+	3) date +"%A, %B %e, %Y %l:%M %p";;
+	*) date +"$FORMAT";;
+esac
+
+# ate +"◴ %A, %B %e, %I:%M %p"
+#echo $(date +"$FORMAT")

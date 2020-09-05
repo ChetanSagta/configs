@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+
+import requests
+
+try:
+    ip = requests.get("https://ipinfo.io/ip")
+
+    ip = ip.text.replace("\n","")
+    print(ip)
+    print(ip)
+    print("#bbddbb")
+except Exception:
+    pass
