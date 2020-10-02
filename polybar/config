@@ -29,7 +29,7 @@ cursor-click = pointer
 
 
 ;====Module settings+======================================
-modules-left = explorer
+modules-left = explorer battery charging-state
 modules-center = date 
 modules-right = xbacklight volume cpu-graph memory powermenu
 ;==========================================================
@@ -48,9 +48,13 @@ content-foreground = ${colors.fg}
 content-underline = ${colors.adapta-cyan}
 click-left = termite -e ranger 
 
+[module/charging-state]
+type = custom/script 
+label-underline = ${colors.adapta-cyan}
+exec = ~/.config/polybar/charging-state.sh
+tail = true 
+interval = 1
 ;==========================================================
-
-
 
 ;====Center modules========================================
 [module/date]
