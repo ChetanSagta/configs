@@ -29,7 +29,7 @@ cursor-click = pointer
 
 
 ;====Module settings+======================================
-modules-left = explorer charging-state
+modules-left = explorer charging-state download-speed
 modules-center = date 
 modules-right = xbacklight volume cpu-graph memory powermenu
 ;==========================================================
@@ -47,6 +47,13 @@ content-margin = 1
 content-foreground = ${colors.fg}
 content-underline = ${colors.adapta-cyan}
 click-left = termite -e ranger 
+
+[module/download-speed]
+type = custom/script 
+label-underline = ${colors.adapta-cyan}
+exec = ~/.config/polybar/download-speed.sh
+tail = true 
+interval = 1
 
 [module/charging-state]
 type = custom/script 
