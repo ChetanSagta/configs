@@ -11,7 +11,7 @@ adapta-green = #009688
 adapta-grey = #475359
 
 [margin]
-for-modules = 1
+for-modules = 0
 
 [bar/main]
 width = 100%
@@ -29,9 +29,9 @@ cursor-click = pointer
 
 
 ;====Module settings+======================================
-modules-left = explorer charging-state download-speed
-modules-center = date 
-modules-right = xbacklight volume cpu-graph memory powermenu
+modules-left =  cpu-graph memory
+modules-center = i3 
+modules-right = rss spotify charging download-speed xbacklight volume date powermenu
 ;==========================================================
 
 
@@ -52,6 +52,7 @@ click-left = termite -e ranger
 type = custom/script 
 label-underline = ${colors.adapta-cyan}
 exec = ~/.config/polybar/download-speed.sh
+format-padding = 1
 tail = true 
 interval = 1
 
@@ -71,21 +72,52 @@ label =  %time%
 label-padding = 1
 ;label-background = ${colors.shade1}
 label-underline = ${colors.adapta-cyan}
-time =   %r
+;time =   %r
+time = %A,%H:%M
 label-margin = ${margin.for-modules}
-time-alt = %A, %d %B %Y 
+time-alt =%A, %d %B %Y 
 ;==========================================================
 
 
+tray-position = right
+; If true, the bar will not shift its
+; contents when the tray changes
+tray-detached = false
+
+; Tray icon max size
+tray-maxsize = 16
+
+; DEPRECATED! Since 3.3.0 the tray always uses pseudo-transparency
+; Enable pseudo transparency
+; Will automatically be enabled if a fully transparent
+; background color is defined using `tray-background`
+tray-transparent = false
+
+; Background color for the tray container 
+; ARGB color (e.g. #f00, #ff992a, #ddff1023)
+; By default the tray container will use the bar
+; background color.
+tray-background = ${root.background}
+
+; Tray offset defined as pixel value (e.g. 35) or percentage (e.g. 50%)
+tray-offset-x = 0
+tray-offset-y = 0
+
+; Pad the sides of each tray icon
+tray-padding = 0
+
+; Scale factor for tray clients
+tray-scale = 1.0
 
 
 ;====Right modules=========================================
-[module/xbacklight]
+[module/xbackligh0]
 type = internal/xbacklight
-format = <label> <bar>
+;format = <label> <bar>
+format = <label>
 format-underline = ${colors.adapta-cyan}
-format-padding = 1
-label = 
+format-padding = 0
+label =   %percentage%
 
 bar-indicator = 
 bar-indicator-foreground = ${colors.adapta-lightgreen}
@@ -101,13 +133,14 @@ bar-width = 8
 
 [module/volume]
 type = internal/alsa
-format-volume = <label-volume> <bar-volume>
+;format-volume = <label-volume> <bar-volume>
+format-volume = <label-volume> 
 format-volume-underline = ${colors.adapta-cyan}
-format-volume-padding = 1
-label-volume = 墳
-label-muted = 婢
+format-volume-padding = 0
+label-volume = 墳 %percentage%
+label-muted = 婢 0
 label-muted-underline = ${colors.adapta-cyan}
-label-muted-padding = 1
+label-muted-padding = 0
 bar-volume-width = 8
 bar-volume-foreground-0 = ${colors.adapta-lightgreen}
 bar-volume-foreground-1 = ${colors.adapta-lightgreen}
@@ -135,7 +168,7 @@ interval = 0.08
 format = " <ramp-coreload>"
 format-underline = ${colors.adapta-cyan}
 format-margin = ${margin.for-modules}
-format-padding = 1
+format-padding = 0
 ramp-coreload-0 = ▁
 ramp-coreload-0-foreground = ${colors.adapta-cyan}
 ramp-coreload-1 = ▂
@@ -160,16 +193,85 @@ interval = 0.1
 format-prefix = " "
 format-underline = ${colors.adapta-cyan}
 ;format-margin = ${margin.for-modules}
-format-padding = 1
+format-padding = 0
 label = %percentage_used:2%%
 
 [module/powermenu]
 type = custom/text
 content = 襤
-content-padding = 1
+content-padding = 0
 ;content-background = ${colors.shade1}
 content-underline = ${colors.adapta-cyan}
 content-foreground = ${colors.fg}
 click-left = ~/.config/polybar/pmenu
 click-right = ~/.config/polybar/pmenu
+
+[module/spotify]
+type = custom/text
+content = 阮
+click-left = spotify
+content-padding = 0
+
+[module/rss]
+type = custom/text
+content =  
+content-padding = 1
+click-left = termite -e newsboat &
+
+[module/i3]
+type = internal/i3
+
+; Only show workspaces defined on the same output as the bar
+;
+; Useful if you want to show monitor specific workspaces
+; on different bars
+;
+; Default: false
+pin-workspaces = true
+
+; This will split the workspace name on ':'
+; Default: false
+strip-wsnumbers = true
+
+; Sort the workspaces by index instead of the default
+; sorting that groups the workspaces by output
+; Default: false
+;index-sort = true
+
+; Create click handler used to focus workspace
+; Default: true
+enable-click = true 
+
+; Create scroll handlers used to cycle workspaces
+; Default: true
+;enable-scroll = false
+
+; Wrap around when reaching the first/last workspace
+; Default: true
+;wrapping-scroll = false
+
+; Set the scroll cycle direction 
+; Default: true
+reverse-scroll = false
+
+; Use fuzzy (partial) matching on labels when assigning 
+; icons to workspaces
+; Example: code;♚ will apply the icon to all workspaces 
+; containing 'code' in the label
+; Default: false
+fuzzy-match = true
+
+; ws-icon-[0-9]+ = <label>;<icon>
+; NOTE: The <label> needs to match the name of the i3 workspace
+; Neither <label> nor <icon> can contain a semicolon (;)
+ws-icon-0 = 1;♚
+ws-icon-1 = 2;♛
+ws-icon-2 = 3;♜
+ws-icon-3 = 4;♝
+ws-icon-4 = 5;♞
+ws-icon-default = ♟
+; NOTE: You cannot skip icons, e.g. to get a ws-icon-6
+; you must also define a ws-icon-5.
+; NOTE: Icon will be available as the %icon% token inside label-*
+
 ;==========================================================
