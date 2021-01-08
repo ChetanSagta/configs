@@ -112,16 +112,17 @@ bindsym $mod+space focus mode_toggle
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1❶" 
-set $ws2 "2❷" 
-set $ws3 "3❸"
-set $ws4 "4❹"
-set $ws5 "5❺"
-set $ws6 "6❻"
-set $ws7 "7❼"
-set $ws8 "8❽"
-set $ws9 "9❾"
-set $ws10 "10❿"
+
+set $ws1 1:❶ 
+set $ws2 2:❷ 
+set $ws3 3:❸
+set $ws4 4:❹
+set $ws5 5:❺
+set $ws6 6:❻
+set $ws7 7:❼
+set $ws8 8:❽
+set $ws9 9:❾
+set $ws10 10:❿
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1 
