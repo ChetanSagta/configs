@@ -1,1 +1,1 @@
-These are the dotfiles for linux configuration
+These are the dotfiles for my linux configuration
