@@ -25,21 +25,15 @@ font-1 = "FontAwesome:pixelsize=11;"
 font-2 = "Iosevka Nerd Font:pixelsize=11;"
 cursor-click = pointer
 tray-position = left
-
 ;==========================================================
-
-
 
 ;====Module settings+======================================
 modules-left =  cpu-graph memory
 modules-center = i3 
-modules-right = spotify-title rss spotify charging-state download-speed xbacklight volume date powermenu
+modules-right = spotify-title spotify rss charging-state download-speed xbacklight volume date powermenu
 ;==========================================================
 
-
-
 ;====Left modules==========================================
-
 [module/explorer]
 type = custom/text
 ;content = 
@@ -63,6 +57,7 @@ interval = 1
 type = custom/script 
 label-underline = ${colors.adapta-cyan}
 exec = ~/.config/polybar/charging-state.sh
+format-foreground = ${colors.adapta-cyan}
 tail = true 
 interval = 1
 ;==========================================================
@@ -72,7 +67,7 @@ interval = 1
 type = internal/date
 interval = 1
 label =  %time%
-label-padding = 1
+label-padding = 0
 ;label-background = ${colors.shade1}
 label-foreground = ${colors.adapta-red}
 label-underline = ${colors.adapta-cyan}
@@ -90,7 +85,7 @@ type = internal/xbacklight
 format = <label>
 format-underline = ${colors.adapta-cyan}
 format-foreground = ${colors.adapta-yellow}
-format-padding = 1
+format-padding = 0
 label =  %percentage%
 
 bar-indicator = 
@@ -110,7 +105,7 @@ type = internal/alsa
 ;format-volume = <label-volume> <bar-volume>
 format-volume = <label-volume> 
 format-volume-underline = ${colors.adapta-cyan}
-format-volume-padding = 0
+format-volume-padding = 1
 label-volume = 墳 %percentage%
 format-volume-foreground = ${colors.adapta-yellow}
 label-muted = 婢 0
@@ -174,7 +169,7 @@ label = %percentage_used:2%%
 [module/powermenu]
 type = custom/text
 content = 襤
-content-padding = 0
+content-padding = 1
 ;content-background = ${colors.shade1}
 content-underline = ${colors.adapta-cyan}
 content-foreground = ${colors.adapta-red}
@@ -186,13 +181,15 @@ type = custom/text
 content = 阮
 click-left = spotify
 content-underline = ${colors.adapta-cyan}
-content-padding = 0
+content-foreground = ${colors.adapta-cyan}
+content-padding = 1
 
 [module/rss]
 type = custom/text
 content =  
 content-padding = 1
 content-underline = ${colors.adapta-cyan}
+content-foreground = ${colors.adapta-cyan}
 click-left = termite -e newsboat &
 
 [module/i3]

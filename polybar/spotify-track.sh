@@ -4,6 +4,9 @@ if [ "$song_metadata" = "" ]; then
    echo ""
 else
    temp_title=$(echo $song_metadata|grep -w '"xesam:title" [a-zA-Z ]* "[a-zA-Z ]*"' -o)
+   temp_artist=$(echo $song_metadata| tr -d '\n' | grep 'artist"[a-zA-Z \["]*' -o)
    title=$(echo $temp_title|grep ' ".*"' -o)
-   echo $title
+   artist=$(echo $temp_artist|grep ' ".*"' -o)
+   
+   echo $title-$artist
 fi
