@@ -3,10 +3,10 @@ song_metadata=$(dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.
 if [ "$song_metadata" = "" ]; then
    echo ""
 else
-   temp_title=$(echo $song_metadata|grep -w '"xesam:title" [a-zA-Z ]* "[a-zA-Z ]*"' -o)
-   temp_artist=$(echo $song_metadata| tr -d '\n' | grep 'artist"[a-zA-Z \["]*' -o)
-   title=$(echo $temp_title|grep ' ".*"' -o)
-   artist=$(echo $temp_artist|grep ' ".*"' -o)
+   temp_title=$(echo $song_metadata| tr -d '\n' | grep -e 'title[^)]*' -o) 
+   temp_artist=$(echo $song_metadata| tr -d '\n' | grep -e 'artist[^)]*' -o)
+   title=$(echo $temp_title|grep -e '[^e]".*"' -o | tr -d '"')
+   artist=$(echo $temp_artist|grep -e '[^t]".*"' -o | tr -d '"')
    
-   echo $title-$artist
+   echo $title :$artist
 fi
