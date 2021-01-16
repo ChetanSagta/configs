@@ -1,12 +1,21 @@
+#!/bin/bash
+
 song_metadata=$(dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata' 2>/dev/null)
 
-if [ "$song_metadata" = "" ]; then
-   echo ""
+stripped_metadata=$(echo $song_metadata | tr -d '\n')
+temp_title=$(echo $stripped_metadata | grep -P 'title".*?(".*?")' -o) 
+temp_artist=$(echo $stripped_metadata | grep -P 'artist".*?(".*?")' -o)
+temp_album_artist=$(echo $stripped_metadata | grep -P 'albumArtist".*?(".*?")' -o)
+title=$(echo $temp_title|grep -P '[^e]".*"' -o | tr -d '"')
+artist=$(echo $temp_artist|grep -P '[^t]".*"' -o | tr -d '"')
+albumArtist=$(echo $temp_album_artist|grep -P '[^t]".*"' -o | tr -d '"')
+
+if [[ "$artist" == " " ]];
+then
+   echo $title
+elif [[ "$albumArtist" == "$artist" ]];
+then 
+   echo $title :$artist  
 else
-   temp_title=$(echo $song_metadata| tr -d '\n' | grep -e 'title[^)]*' -o) 
-   temp_artist=$(echo $song_metadata| tr -d '\n' | grep -e 'artist[^)]*' -o)
-   title=$(echo $temp_title|grep -e '[^e]".*"' -o | tr -d '"')
-   artist=$(echo $temp_artist|grep -e '[^t]".*"' -o | tr -d '"')
-   
-   echo $title :$artist
+   echo $title :$artist,$albumArtist
 fi

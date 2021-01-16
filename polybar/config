@@ -28,7 +28,7 @@ tray-position = left
 ;==========================================================
 
 ;====Module settings+======================================
-modules-left =  cpu-graph memory
+modules-left =  cpu-graph 
 modules-center = i3 
 modules-right = spotify-title spotify rss charging-state download-speed xbacklight volume date powermenu
 ;==========================================================
@@ -285,4 +285,5 @@ exec = ~/.config/polybar/spotify-track.sh
 format = <label>
 format-foreground = ${colors.adapta-yellow}
 format-underline = ${colors.adapta-cyan}
+tail = true
 ;==========================================================
