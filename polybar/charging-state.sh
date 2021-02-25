@@ -5,19 +5,21 @@ percentage=$(upower -i `upower -e | grep 'BAT'` | grep percentage | awk '{print 
 
 if [ "$charging_state" = "charging" ];
 then
-    echo '  '
+    xbacklight -set 100
+    echo ''
     sleep 0.3
-    echo  '  '
+    echo  ''
     sleep 0.3
-    echo  '  '
+    echo  ''
     sleep 0.3
-    echo  '  '
+    echo  ''
     sleep 0.3
-    echo  '  '
+    echo  ''
     sleep 0.3
-    echo  '  '
+    echo  ''
     sleep 0.3
-	echo '  '
+	echo '' 
 else 
-  echo '  '  
+  xbacklight -set 30
+  echo '' 
 fi

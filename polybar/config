@@ -15,22 +15,24 @@ for-modules = 0
 
 [bar/main]
 width = 100%
-height = 20
+height = 18
 fixed-center = true
 line-size = 1 
 background = ${colors.bg}
 foreground = ${colors.fg}
-font-0 = "FiraCode Nerd Font:pixelsize=10;"
-font-1 = "FontAwesome:pixelsize=11;"
-font-2 = "Iosevka Nerd Font:pixelsize=11;"
+font-0 = "FiraCode Nerd Font:pixelsize=9;"
+font-1 = "FontAwesome:pixelsize=8;"
+font-2 = "Samyak Devanagari:pixelsize=8;"
+font-3 = "Noto Color Emoji:scale=12"
 cursor-click = pointer
 tray-position = left
+enable-ipc = true
 ;==========================================================
 
 ;====Module settings+======================================
-modules-left =  cpu-graph 
+modules-left =  cpu-graph upgrade-list weather
 modules-center = i3 
-modules-right = spotify-title spotify rss charging-state download-speed xbacklight volume date powermenu
+modules-right = spotify charging-state download-speed xbacklight pulseaudio date powermenu
 ;==========================================================
 
 ;====Left modules==========================================
@@ -44,14 +46,20 @@ content-foreground = ${colors.fg}
 content-underline = ${colors.adapta-cyan}
 click-left = termite -e ranger 
 
+[module/weather]
+type = custom/script
+exec = 
+interval =3600
+
+
 [module/download-speed]
 type = custom/script 
 label-underline = ${colors.adapta-cyan}
 label-foreground = ${colors.adapta-red}
-exec = ~/.config/polybar/download-speed.sh
+exec = ifstat -z 1 1 2>/dev/null | tail -1 | awk '{print "  "$1"  " $2}'
 format-padding = 1
 tail = true 
-interval = 1
+interval = 0
 
 [module/charging-state]
 type = custom/script 
@@ -59,7 +67,9 @@ label-underline = ${colors.adapta-cyan}
 exec = ~/.config/polybar/charging-state.sh
 format-foreground = ${colors.adapta-cyan}
 tail = true 
+label-padding = 1
 interval = 1
+
 ;==========================================================
 
 ;====Center modules========================================
@@ -100,6 +110,29 @@ bar-empty-foreground = ${colors.adapta-grey}
 bar-width = 8
 ;format-margin = ${margin.for-modules}
 
+[module/pulseaudio]
+type = internal/pulseaudio
+
+; Sink to be used, if it exists (find using `pacmd list-sinks`, name field)
+; If not, uses default sink
+
+; Use PA_VOLUME_UI_MAX (~153%) if true, or PA_VOLUME_NORM (100%) if false
+; Default: true
+use-ui-max = true
+
+format-volume = <label-volume> 
+format-volume-underline = ${colors.adapta-cyan}
+format-volume-padding = 1
+label-volume = 墳 %percentage%
+format-volume-foreground = ${colors.adapta-yellow}
+format-muted-foreground = ${colors.adapta-yellow}
+label-muted = 婢 0
+label-muted-padding=1
+ 
+; Interval for volume increase/decrease (in percent points)
+; Default: 5
+interval = 1
+
 [module/volume]
 type = internal/alsa
 ;format-volume = <label-volume> <bar-volume>
@@ -108,9 +141,10 @@ format-volume-underline = ${colors.adapta-cyan}
 format-volume-padding = 1
 label-volume = 墳 %percentage%
 format-volume-foreground = ${colors.adapta-yellow}
+format-muted-foreground = ${colors.adapta-yellow}
 label-muted = 婢 0
 label-muted-underline = ${colors.adapta-cyan}
-label-muted-padding = 0
+label-muted-padding = 1
 bar-volume-width = 8
 bar-volume-foreground-0 = ${colors.adapta-lightgreen}
 bar-volume-foreground-1 = ${colors.adapta-lightgreen}
@@ -175,14 +209,6 @@ content-underline = ${colors.adapta-cyan}
 content-foreground = ${colors.adapta-red}
 click-left = ~/.config/polybar/pmenu
 click-right = ~/.config/polybar/pmenu
-
-[module/spotify]
-type = custom/text
-content = 阮
-click-left = spotify &
-content-underline = ${colors.adapta-cyan}
-content-foreground = ${colors.adapta-cyan}
-content-padding = 1
 
 [module/rss]
 type = custom/text
@@ -279,11 +305,22 @@ label-urgent-foreground = #000000
 label-urgent-background = #bd2c40
 label-urgent-padding = 1
 
-[module/spotify-title]
+[module/spotify]
 type = custom/script
 exec = ~/.config/polybar/spotify-track.sh
-format = <label>
+format-prefix = "阮 " 
+format-padding=1
 format-foreground = ${colors.adapta-yellow}
 format-underline = ${colors.adapta-cyan}
 tail = true
+
+[module/upgrade-list]
+type = custom/script
+exec = apt list --upgradable 2>/dev/null | sed '1d' | wc -l
+format-prefix = " " 
+format-padding = 1
+format-foreground = ${colors.adapta-cyan}
+format-underline = ${colors.adapta-cyan}
+tail = true
+interval = 3600
 ;==========================================================

@@ -10,7 +10,7 @@ title=$(echo $temp_title|grep -P '[^e]".*"' -o | tr -d '"')
 artist=$(echo $temp_artist|grep -P '[^t]".*"' -o | tr -d '"')
 albumArtist=$(echo $temp_album_artist|grep -P '[^t]".*"' -o | tr -d '"')
 
-if [[ "$artist" == " " ]];
+if [[ "$artist" == "" ]];
 then
    echo $title
 elif [[ "$albumArtist" == "$artist" ]];
