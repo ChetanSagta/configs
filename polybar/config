@@ -30,7 +30,7 @@ enable-ipc = true
 ;==========================================================
 
 ;====Module settings+======================================
-modules-left =  cpu-graph upgrade-list weather
+modules-left =  cpu-graph weather
 modules-center = i3 
 modules-right = spotify charging-state download-speed xbacklight pulseaudio date powermenu
 ;==========================================================
@@ -59,7 +59,6 @@ label-foreground = ${colors.adapta-red}
 exec = ifstat -z 1 1 2>/dev/null | tail -1 | awk '{print "  "$1"  " $2}'
 format-padding = 1
 tail = true 
-interval = 0
 
 [module/charging-state]
 type = custom/script 
@@ -308,19 +307,8 @@ label-urgent-padding = 1
 [module/spotify]
 type = custom/script
 exec = ~/.config/polybar/spotify-track.sh
+click-left = exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
 format-prefix = "阮 " 
 format-padding=1
 format-foreground = ${colors.adapta-yellow}
 format-underline = ${colors.adapta-cyan}
-tail = true
-
-[module/upgrade-list]
-type = custom/script
-exec = apt list --upgradable 2>/dev/null | sed '1d' | wc -l
-format-prefix = " " 
-format-padding = 1
-format-foreground = ${colors.adapta-cyan}
-format-underline = ${colors.adapta-cyan}
-tail = true
-interval = 3600
-;==========================================================

@@ -35,10 +35,13 @@ font pango:FiraCode Nerd Font 8
 exec --no-startup-id nm-applet
 exec --no-startup-id udiskie --tray
 
+exec syndaemon -i 1 -K -d
+
 #starting notes application
 #exec_always xpad
 bindsym $mod+Ctrl+n exec killall termite || termite -e newsboat 
 bindsym $mod+t exec termite -e 'nnn -dH' &
+bindsym $mod+p exec bash ~/.config/polybar/spotify-start.sh 
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -245,15 +248,15 @@ new_window pixel 0
 
 default_border pixel 3 
 exec_always ~/.config/polybar/launch.sh   
-bindsym $mod+q exec brave-browser 
-bindsym $mod+i exec ~/Downloads/idea-IC-203.5981.155/bin/idea.sh
+bindsym $mod+q exec brave-browser ; exec notify-send "Launching Brave Browser"
+bindsym $mod+i exec ~/Downloads/idea-IC-203.5981.155/bin/idea.sh ; exec notify-send "Launching Intellij Idea"
 bindsym $mod+Shift+x exec i3lock-fancy 
 
 # Multi-screen screenshots with scrot
-bindsym --release Print exec scrot 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/Pictures/screenshots && mv $f ~/Pictures/screenshots && xclip -selection clipboard -t image/png -i ~/Pictures/screenshots/`ls -1 -t ~/Pictures/screenshots | head -1`' # All screens
+bindsym --release Print exec scrot 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/Pictures/screenshots && mv $f ~/Pictures/screenshots && xclip -selection clipboard -t image/png -i ~/Pictures/screenshots/`ls -1 -t ~/Pictures/screenshots | head -1`'; exec notify-send "Screenshot Taken" # All screens
 
 # OSX-like area selection screenshots
-bindsym --release Shift+Print exec scrot -s 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/Pictures/screenshots && mv $f ~/Pictures/screenshots && xclip -selection clipboard -t image/png -i ~/Pictures/screenshots/`ls -1 -t ~/Pictures/screenshots | head -1`' # Area selection
+bindsym --release Shift+Print exec scrot -s 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/Pictures/screenshots && mv $f ~/Pictures/screenshots && xclip -selection clipboard -t image/png -i ~/Pictures/screenshots/`ls -1 -t ~/Pictures/screenshots | head -1`' ;exec notify-send "Screenshot Taken"# Area selection
 exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 
 #spotify shortcut keys
@@ -264,5 +267,5 @@ bindsym XF86AudioPause dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spo
 
 #scratchpad
 
-bindsym $mod+x move scratchpad
+bindsym $mod+x move scratchpad ; exec notify-send "Moved to Scratchpad"
 bindsym $mod+y scratchpad show

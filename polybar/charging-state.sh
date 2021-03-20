@@ -18,8 +18,8 @@ then
     sleep 0.3
     echo  ''
     sleep 0.3
-	echo '' 
-else 
+	  echo ''
+else
   xbacklight -set 30
-  echo '' 
+  echo ''
 fi

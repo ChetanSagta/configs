@@ -12,10 +12,10 @@ albumArtist=$(echo $temp_album_artist|grep -P '[^t]".*"' -o | tr -d '"')
 
 if [[ "$artist" == "" ]];
 then
-   echo $title
+   echo ${title:0:20}
 elif [[ "$albumArtist" == "$artist" ]];
 then 
-   echo $title :$artist  
+   echo ${title:0:20} :${artist:0:20} 
 else
-   echo $title :$artist,$albumArtist
+   echo ${artist:0:20},${albumArtist:0:20}
 fi
