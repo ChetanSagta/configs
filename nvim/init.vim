@@ -35,7 +35,6 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'ParamagicDev/vim-medic_chalk'
 Plug 'tpope/vim-fugitive'
 Plug 'gorodinskiy/vim-coloresque'
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 Plug 'ryanoasis/vim-devicons'
 Plug 'ycm-core/YouCompleteMe'
@@ -45,30 +44,6 @@ call plug#end()
 
 colorscheme spaceduck 
 let g:rainbow_active = 1
-
-"StatusLine
-" Function: display errors from Ale in statusline
-function! LinterStatus() abort
-   let l:all_errors = l:counts.error + l:counts.style_error
-   let l:all_non_errors = l:counts.total - l:all_errors
-   return l:counts.total == 0 ? '' : printf(
-   \ 'W:%d E:%d',
-   \ l:all_non_errors,
-   \ l:all_errors
-   \)
-endfunction
-function! StatusDiagnostic() abort
-  let info = get(b:, 'coc_diagnostic_info', {})
-  if empty(info) | return '' | endif
-  let msgs = []
-  if get(info, 'error', 0)
-    call add(msgs, 'E' . info['error'])
-  endif
-  if get(info, 'warning', 0)
-    call add(msgs, 'W' . info['warning'])
-  endif
-  return join(msgs, ' '). ' ' . get(g:, 'coc_status', '')
-endfunction
 
 hi User1 ctermbg=blue ctermfg=red   guibg=blue guifg=lightcyan
 hi User2 ctermbg=yellow   ctermfg=white  guibg=red guifg=yellow
@@ -82,51 +57,20 @@ set statusline+=%2*\‹‹
 set statusline+=\%f
 set statusline+=%2*\››
 set statusline+=%1*\%m
-"set statusline+=%1*\%{coc#status()}
-set statusline+=%1*\%{StatusDiagnostic()}
-"set statusline+=%2*\ %{LinterStatus()}
 let mapleader = " "
 :map <leader>e :NERDTreeToggle<CR>
 set number relativenumber
 
-"coc.nvim settings
-" nmap <silent> gd <Plug>(coc-definition)
-" nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
-" nmap <silent> gr <Plug>(coc-references)
-" autocmd CursorHold * silent call CocActionAsync('highlight')
-" highlight CocFloating ctermbg=white
-" autocmd FileType json syntax match Comment +\/\/.\+$+
-" inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<CR>"
-" " Use <c-space> to trigger completion.
-" if has('nvim')
-  " :verbose inoremap <silent><expr> <c-space> coc#refresh()
-" else
-  " inoremap <silent><expr> <c-@> coc#refresh()
-" endif
-" Shorten error/warning flags
-" I have some custom icons for errors and warnings but feel free to change them.
-" Disable or enable loclist at the bottom of vim 
-" Comes down to personal preferance.
 "Vim-polyglot
-
 "i3-config
 aug i3config_ft_detection
   au!
   au BufNewFile,BufRead ~/.config/i3/config set filetype=i3config
 aug end
+
 "Ctrl-p
 :map <leader>f :CtrlP<CR>
 set number relativenumber
-
-"coc.nvim settings
-" nmap <silent> gd <Plug>(coc-definition)
-" nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
-" nmap <silent> gr <Plug>(coc-references)
-" autocmd CursorHold * silent call CocActionAsync('highlight')
-" highlight CocFloating ctermbg=white
-" autocmd FileType json syntax match Comment +\/\/.\+$+
 
 :map <leader>x :ALEFix<CR>
 " :map <F2> :ALERename<CR>
