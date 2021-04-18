@@ -1,11 +1,8 @@
 set nocompatible
-
 noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
-
-
 set clipboard=unnamedplus
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
 set termguicolors
@@ -19,12 +16,10 @@ set shiftwidth=2
 set expandtab
 " Give more space for displaying messages.
 " set cmdheigPht=
-
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
 set updatetime=300
 syntax on
-
 "auto sourcing when saving the file
 autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 
@@ -40,10 +35,12 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'ParamagicDev/vim-medic_chalk'
 Plug 'tpope/vim-fugitive'
 Plug 'gorodinskiy/vim-coloresque'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'dense-analysis/ale'
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 Plug 'ryanoasis/vim-devicons'
+Plug 'ycm-core/YouCompleteMe'
+Plug 'voldikss/vim-floaterm'
+Plug 'preservim/nerdtree'
 call plug#end()
 
 colorscheme spaceduck 
@@ -52,7 +49,6 @@ let g:rainbow_active = 1
 "StatusLine
 " Function: display errors from Ale in statusline
 function! LinterStatus() abort
-  let l:counts = ale#statusline#Count(bufnr(''))
    let l:all_errors = l:counts.error + l:counts.style_error
    let l:all_non_errors = l:counts.total - l:all_errors
    return l:counts.total == 0 ? '' : printf(
@@ -61,7 +57,6 @@ function! LinterStatus() abort
    \ l:all_errors
    \)
 endfunction
-
 function! StatusDiagnostic() abort
   let info = get(b:, 'coc_diagnostic_info', {})
   if empty(info) | return '' | endif
@@ -87,97 +82,55 @@ set statusline+=%2*\‹‹
 set statusline+=\%f
 set statusline+=%2*\››
 set statusline+=%1*\%m
-set statusline+=%1*\%{coc#status()}
+"set statusline+=%1*\%{coc#status()}
 set statusline+=%1*\%{StatusDiagnostic()}
-set statusline+=%2*\ %{LinterStatus()}
-
+"set statusline+=%2*\ %{LinterStatus()}
 let mapleader = " "
-:map <leader>e :CocCommand explorer<CR>
-
+:map <leader>e :NERDTreeToggle<CR>
 set number relativenumber
 
 "coc.nvim settings
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-autocmd CursorHold * silent call CocActionAsync('highlight')
-highlight CocFloating ctermbg=white
-autocmd FileType json syntax match Comment +\/\/.\+$+
-inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<CR>"
-" Use <c-space> to trigger completion.
-if has('nvim')
-  :verbose inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
-
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
+" autocmd CursorHold * silent call CocActionAsync('highlight')
+" highlight CocFloating ctermbg=white
+" autocmd FileType json syntax match Comment +\/\/.\+$+
+" inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<CR>"
+" " Use <c-space> to trigger completion.
+" if has('nvim')
+  " :verbose inoremap <silent><expr> <c-space> coc#refresh()
+" else
+  " inoremap <silent><expr> <c-@> coc#refresh()
+" endif
 " Shorten error/warning flags
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
 " I have some custom icons for errors and warnings but feel free to change them.
-let g:ale_sign_error = '✘✘'
-let g:ale_sign_warning = '⚠⚠'
-
 " Disable or enable loclist at the bottom of vim 
 " Comes down to personal preferance.
-let g:ale_open_list = 0
-let g:ale_loclist = 0
-
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-
 "Vim-polyglot
+
 "i3-config
 aug i3config_ft_detection
   au!
   au BufNewFile,BufRead ~/.config/i3/config set filetype=i3config
 aug end
-
 "Ctrl-p
 :map <leader>f :CtrlP<CR>
-
 set number relativenumber
 
 "coc.nvim settings
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-autocmd CursorHold * silent call CocActionAsync('highlight')
-highlight CocFloating ctermbg=white
-autocmd FileType json syntax match Comment +\/\/.\+$+
-
-" Shorten error/warning flags
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-" I have some custom icons for errors and warnings but feel free to change them.
-let g:ale_sign_error = '✘✘'
-let g:ale_sign_warning = '⚠⚠'
-
-" Disable or enable loclist at the bottom of vim 
-" Comes down to personal preferance.
-let g:ale_open_list = 0
-let g:ale_loclist = 0
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
+" autocmd CursorHold * silent call CocActionAsync('highlight')
+" highlight CocFloating ctermbg=white
+" autocmd FileType json syntax match Comment +\/\/.\+$+
 
 :map <leader>x :ALEFix<CR>
-:map <F2> :ALERename<CR>
+" :map <F2> :ALERename<CR>
 
-
-"ALE Fixers
-let g:ale_fixers = {
-\   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\   'javascript': ['eslint','prettier'],
-\   'typescript': ['eslint','prettier'],
-\   'html': ['prettier'],
-\   'css': ['prettier'],
-\   'bash': ['shellcheck'],
-\}
-
-"Vim-polyglot
 "i3-config
 aug i3config_ft_detection
   au!
@@ -198,3 +151,22 @@ let g:NERDToggleCheckAllLines = 1
 
 "CtrlP speedup
 let g:ctrlp_user_command = ['.git/', 'git ls-files --cached --others  --exclude-standard %s']
+
+let g:floaterm_keymap_toggle = '<F1>'
+let g:floaterm_keymap_next   = '<F2>'
+let g:floaterm_keymap_prev   = '<F3>'
+let g:floaterm_keymap_new    = '<F4>'
+
+" Floaterm
+let g:floaterm_gitcommit='floaterm'
+let g:floaterm_autoinsert=1
+let g:floaterm_width=0.8
+let g:floaterm_height=0.8
+let g:floaterm_wintitle=0
+let g:floaterm_autoclose=1
+
+
+"YCM Config
+:map <leader>i :YcmCompleter OrganizeImports <CR>
+:map <leader>y :YcmCompleter FixIt <CR>
+:map <leader>r :YcmCompleter RefactorRename <CR>
