@@ -72,9 +72,6 @@ aug end
 :map <leader>f :CtrlP<CR>
 set number relativenumber
 
-:map <leader>x :ALEFix<CR>
-" :map <F2> :ALERename<CR>
-
 "i3-config
 aug i3config_ft_detection
   au!
@@ -112,5 +109,15 @@ let g:floaterm_autoclose=1
 
 "YCM Config
 :map <leader>i :YcmCompleter OrganizeImports <CR>
-:map <leader>y :YcmCompleter FixIt <CR>
-:map <leader>r :YcmCompleter RefactorRename <CR>
+:map <leader>x :YcmCompleter FixIt <CR>
+:map <leader>r :YcmCompleter RefactorRename 
+
+
+let g:ycm_always_populate_location_list = 1
+let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
+nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>gd :YcmCompleter GoToDefinitionElseDeclaration<CR>
