@@ -15,6 +15,12 @@
 # If you want to use XFCE config tools...
 #
 #xfce-mcs-manager &
-feh --bg-fill /usr/share/backgrounds/xfce/manjaro-cat.jpg &
+conky &
+sxhkd & 
+dunst &
+nitrogen --restore &
+picom &
 tint2 &
+alttab -fg "#d58681" -bg "#4a4a4a" -frame "#eb564d" -t 128x150 -i 127x64 &
+brave-browser &
 sh ~/.config/polybar/launch.sh &
