@@ -13,7 +13,6 @@
 
 set $mod Mod4
 
-workspace_layout tabbed
 title_align center
 
 #workspace_auto_back_and_forth yes
@@ -35,8 +34,13 @@ font pango:FiraCode Nerd Font 8
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
+exec_always xrandr -r 60
 exec --no-startup-id nm-applet
 exec --no-startup-id udiskie --tray
+exec --no-startup-id blueman-applet
+exec_always nitrogen --restore
+exec_always urxvtd &
+
 
 exec syndaemon -i 1 -K -d
 
@@ -212,7 +216,7 @@ bindsym $mod+r mode "resize"
 bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
 
-exec_always feh --bg-fill ~/Downloads/lion.jpg &
+# exec_always feh --bg-fill ~/Pictures/wallpaper/nier automata.webp &
 
 # class                 border  bground text    indicator child_border
 client.focused          #6272A4 #6272A4 #F8F8F2 #6272A4   #6272A4
@@ -250,7 +254,6 @@ new_window pixel 0
 default_border pixel 3 
 exec_always ~/.config/polybar/launch.sh   
 bindsym $mod+q exec brave-browser ; exec notify-send "Launching Brave Browser"
-bindsym $mod+i exec ~/Downloads/pycharm/bin/pycharm.sh & exec notify-send "Launching Pycharm"
 bindsym $mod+Shift+x exec i3lock-fancy 
 
 # Multi-screen screenshots with scrot
@@ -261,19 +264,22 @@ bindsym --release Shift+Print exec scrot -s 'screenshot_%Y%m%d_%H%M%S.png' -e 'm
 exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 exec dunst &
 exec nvim &
-exec conky &
-exec picom &
-exec brave-browser &
+exec_always conky &
+exec_always picom &
 exec_always notify-send "i3 Loaded"
 
-#spotify shortcut keys
-bindsym XF86AudioPlay exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
-bindsym XF86AudioNext exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next
-bindsym XF86AudioPrev exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous
-bindsym XF86AudioPause dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop
-
 #scratchpad
-
 bindsym $mod+x move scratchpad ; exec notify-send "Moved to Scratchpad"
 bindsym $mod+y scratchpad show
-bindcode 66 exec_always ~/scripts/capslock.sh caps
+
+#keyboard backlight
+bindsym $mod+u exec brightnessctl --device='asus::kbd_backlight' set 1+
+bindsym $mod+i exec brightnessctl --device='asus::kbd_backlight' set 1-
+
+# bindsym XF86KbdBrightnessUp exec notify-send "+"
+# bindsym XF86KbdBrightnessDown exec notify-send "-"
+#DBUS Keys
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioStop exec playerctl stop 

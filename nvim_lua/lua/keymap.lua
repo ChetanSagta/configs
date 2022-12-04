@@ -8,7 +8,7 @@ local keymap = vim.api.nvim_set_keymap
 --keymap("n", "<Space>", "<Nop>", opts)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-keymap("n","<Leader>e",":NvimTreeToggle<CR>", opts)
+keymap("n", "<Leader>e", ":NvimTreeToggle<CR>", opts)
 
 -- Normal --
 -- Better window navigation
@@ -33,7 +33,21 @@ keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
 
 
 --lsp
-vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
+keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
 
 keymap("n", "<Leader>w", ":WhichKey<CR>", opts)
+
+local builtin = require("telescope.builtin")
+vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
+vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
+vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
+vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
+
+--floatTerm
+require("toggleterm").setup {
+  -- size can be a number or function which is passed the current terminal
+  open_mapping = [[<leader>t]],
+  direction = 'float',
+  close_on_exit = true
+}
