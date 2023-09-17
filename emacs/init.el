@@ -1,24 +1,29 @@
 (setq inhibit-startup-screen t)
-(setq default-frame-alist '((font . "Iosevka Nerd Font 14")))
+(setq default-frame-alist '((font . "Iosevka Nerd Font Mono 14")))
 (setq create-lockfiles nil)
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
 (tool-bar-mode 0)
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
+(global-set-key (kbd "<f3>") 'compile)
+(global-set-key (kbd "<f4>") 'recompile)
+(setq make-backup-files nil)
+(setq delete-auto-save-files t)
+(setq auto-save-visited-mode t)
 
-;(setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+(setq backup-directory-alist '(("." . "~/.saves"))
 ;  backup-by-copying t    ; Don't delink hardlinks
 ;  version-control t      ; Use version numbers on backups
 ;  delete-old-versions t  ; Automatically delete excess backups
 ;  kept-new-versions 20   ; how many of the newest versions to keep
 ;  kept-old-versions 5    ; and how many of the old
-;  )
+)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
-(setq package-selected-packages '(projectile helm which-key magit all-the-icons eglot eglot-java yasnippet evil evil-collection evil-leader undo-fu doom-modeline doom-themes treemacs-evil dap-mode company company-quickhelp flycheck tree-sitter tree-sitter-langs))
+(setq package-selected-packages '(cmake-project impatient-mode projectile helm which-key magit all-the-icons eglot eglot-java yasnippet evil evil-collection evil-leader undo-fu doom-modeline doom-themes treemacs-evil dap-mode company company-quickhelp flycheck tree-sitter tree-sitter-langs rust-mode ansi-color multiple-cursors))
 
 (package-install-selected-packages)
 (setq evil-want-integration t)
@@ -52,15 +57,36 @@
 (require 'eldoc)
 (require 'company)
 (require 'yasnippet)
+(require 'rust-mode)
 (add-hook 'after-init-hook 'global-company-mode)
 (company-quickhelp-mode)
 (setq company-quickhelp-delay 0.5)
 (setq gdb-many-windows t)
 (yas-global-mode 1)
 
+(setq eldoc-echo-area-prefer-doc-buffer t)
+(setq eldoc-print-current-symbol-info nil)
+(setq eglot-ignored-server-capabilities (list :hoverProvider))
+
+(defun maybe-cmake-project-mode ()
+  (if (or (file-exists-p "CMakeLists.txt")
+          (file-exists-p (expand-file-name "CMakeLists.txt" (car (project-roots (project-current))))))
+      (cmake-project-mode)))
+
 (add-hook 'c++-mode-hook 'eglot-ensure)
 (add-hook 'c-mode-hook 'eglot-ensure)
+(add-hook 'rust-mode-hook 'eglot-ensure)
 (add-hook 'java-mode-hook 'eglot-java-mode)
+(add-hook 'js-mode-hook 'eglot-java-mode)
+(add-hook 'html-mode-hook 'eglot-java-mode)
+(add-hook 'css-mode-hook 'eglot-java-mode)
+(add-hook 'python-mode-hook 'eglot-java-mode)
+(add-hook 'c-mode-hook 'maybe-cmake-project-mode)
+(add-hook 'c++-mode-hook 'maybe-cmake-project-mode)
+(add-hook 'js-mode-hook 'eglot-js-mode)
+
+(add-hook 'java-mode-hook (lambda () (setq c-basic-offset 4 tab-width 4 indent-tabs-mode t)))
+
 
 (require 'treemacs-evil)
 (require 'doom-modeline)
@@ -76,6 +102,7 @@
 (setq gc-cons-threshold (* 100 1024 1024) read-process-output-max (* 1024 1024))
 
 (require 'dap-cpptools)
+(require 'cmake-project)
 ;(require 'lsp-treemacs)
 
 (evil-leader/set-leader "<SPC>")
@@ -125,54 +152,26 @@
 	  (run-at-time 2.5 nil 'delete-windows-on buf)
 	  (message "No compilation errors!"))))
 
-(defun my-compilation-hook ()
-  (when (not (get-buffer-window "*compilation*"))
-    (save-selected-window
-      (save-excursion
-        (let* ((w (split-window-vertically))
-               (h (window-height w)))
-          (select-window w)
-          (switch-to-buffer "*compilation*")
-          (shrink-window (- h compilation-window-height)))))))
-(add-hook 'compilation-mode-hook 'my-compilation-hook)
-
 (require 'magit)
 
-(require 'cl) ; If you don't have it already
-(defun* get-closest-pathname (&optional (file "Makefile"))
-					;  "This function walks up the current path until it finds Makefile and then retu
-					;rns the path to it."
-  (let ((root (expand-file-name "/")))
-    (expand-file-name file
-		      (cl-loop
-		       for d = default-directory then (expand-file-name ".." d)
-		       if (file-exists-p (expand-file-name file d))
-		       return d
-		       if (equal d root)
-		       return nil))))
-
-(evil-leader/set-key
-  "cc" 'my-compile-clean-func
-  "cr" 'my-compile-func)
 (define-key evil-motion-state-map (kbd"gn") 'next-error)
 (define-key evil-motion-state-map (kbd"gp") 'previous-error)
 
-;;html code fold
-;; When called this automatically detects the submode at the current location.
-;; It will then either forward to end of tag(HTML) or end of code block(JS/CSS).
-;; This will be passed to hs-minor-mode to properly navigate and fold the code.
-(defun mhtml-forward (arg)
-  (interactive "P")
-  (pcase (get-text-property (point) 'mhtml-submode)
-    ('nil (sgml-skip-tag-forward 1))
-    (submode (forward-sexp))))
+(defun my/ansi-colorize-buffer ()
+  (let ((buffer-read-only nil))
+    (ansi-color-apply-on-region (point-min) (point-max))))
 
-;; Adds the tag and curly-brace detection to hs-minor-mode for mhtml.
-(add-to-list 'hs-special-modes-alist
-	     '(mhtml-mode
-	       "{\\|<[^/>]+?"
-	       "}\\|</[^/>]*[^/]>"
-	       "<!--"
-	       mhtml-forward
-	       nil))
-(projectile-mode 1)
+(add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
+
+;multiple cursers
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+
+(global-set-key (kbd "C-.") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
+
+(defun maybe-cmake-project-mode ()
+  (if (or (file-exists-p "CMakeLists.txt")
+          (file-exists-p (expand-file-name "CMakeLists.txt" (car (project-roots (project-current))))))
+      (cmake-project-mode)))
+

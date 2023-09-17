@@ -72,7 +72,7 @@ bindsym $mod+Shift+q kill
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
-bindsym $mod+p exec --no-startup-id dmenu_run
+bindsym $mod+p exec --no-startup-id dmenu_run -i -fn 'Iosevka-12'
 
 # change focus
 bindsym $mod+h focus left
@@ -254,18 +254,19 @@ client.background       #F8F8F2
 #}
 new_window pixel 0
 
-default_border pixel 3 
 exec ~/.config/polybar/launch.sh   
 bindsym $mod+q exec brave-browser ; exec notify-send "Launching Brave Browser"
 bindsym $mod+t exec emacsclient -c
+bindsym $mod+o exec urxvtc -e nvim
 bindsym $mod+Shift+x exec i3lock-fancy 
 bindsym $mod+i exec ~/Downloads/idea/bin/idea.sh
+bindsym $mod+u exec ~/Downloads/android-studio/bin/studio.sh
 
 # Multi-screen screenshots with scrot
 bindsym --release Print exec scrot 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/Pictures/screenshots && mv $f ~/Pictures/screenshots && xclip -selection clipboard -t image/png -i ~/Pictures/screenshots/`ls -1 -t ~/Pictures/screenshots | head -1`'; exec notify-send "Screenshot Taken" # All screens
 
 # OSX-like area selection screenshots
-bindsym --release Shift+Print exec scrot -s 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/Pictures/screenshots && mv $f ~/Pictures/screenshots && xclip -selection clipboard -t image/png -i ~/Pictures/screenshots/`ls -1 -t ~/Pictures/screenshots | head -1`' ;exec notify-send "Screenshot Taken"# Area selection
+bindsym --release Shift+Print exec scrot -s 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/Pictures/screenshots && mv $f ~/Pictures/screenshots && xclip -selection clipboard -t image/png -i ~/Pictures/screenshots/`ls -1 -t ~/Pictures/screenshots | head -1`'; exec notify-send "Screenshot Taken"# Area selection
 exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 exec dunst &
 exec nvim &

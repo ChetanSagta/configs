@@ -20,9 +20,9 @@ fixed-center = true
 line-size = 1 
 background = ${colors.bg}
 foreground = ${colors.fg}
-font-0 = "FiraCode Nerd Font:pixelsize=9;"
-font-1 = "FontAwesome:pixelsize=8;"
-font-2 = "Samyak Devanagari:pixelsize=8;"
+font-0 = "Iosevka Nerd Font:pixelsize=10;"
+font-1 = "FontAwesome:pixelsize=10;"
+font-2 = "Samyak Devanagari:pixelsize=10;"
 font-3 = "Noto Color Emoji:scale=12"
 cursor-click = pointer
 tray-position = left
@@ -30,9 +30,9 @@ enable-ipc = true
 ;==========================================================
 
 ;====Module settings+======================================
-modules-left =  cpu-graph weather
+modules-left =  cpu-graph temperature
 modules-center = i3 
-modules-right = spotify charging-state download-speed xbacklight pulseaudio date powermenu
+modules-right = fan-speed battery charging-state download-speed xbacklight pulseaudio date powermenu
 ;==========================================================
 
 ;====Left modules==========================================
@@ -51,12 +51,21 @@ type = custom/script
 exec = 
 interval =3600
 
+[module/temperature]
 
 [module/download-speed]
 type = custom/script 
 label-underline = ${colors.adapta-cyan}
 label-foreground = ${colors.adapta-red}
 exec = ifstat -z 1 1 2>/dev/null | tail -1 | awk '{print "  "$1"  " $2}'
+format-padding = 1
+tail = true 
+
+[module/fan-speed]
+type = custom/script 
+label-underline = ${colors.adapta-cyan}
+label-foreground = ${colors.adapta-red}
+exec = sensors | grep cpu_fan | awk '{ print " " $2}' 
 format-padding = 1
 tail = true 
 
@@ -67,7 +76,7 @@ exec = ~/.config/polybar/charging-state.sh
 format-foreground = ${colors.adapta-cyan}
 tail = true 
 label-padding = 1
-interval = 1
+interval = 60
 
 ;==========================================================
 
@@ -80,8 +89,8 @@ label-padding = 0
 ;label-background = ${colors.shade1}
 label-foreground = ${colors.adapta-red}
 label-underline = ${colors.adapta-cyan}
-;time =   %r
-time = %A,%H:%M
+time =   %r
+;time = %A,%H:%M
 label-margin = ${margin.for-modules}
 time-alt =%A, %d %B %Y 
 ;==========================================================
@@ -89,9 +98,13 @@ time-alt =%A, %d %B %Y
 
 ;====Right modules=========================================
 [module/xbacklight]
-type = internal/xbacklight
-;format = <label> <bar>
-format = <label>
+type = internal/backlight
+card = amdgpu_bl0
+use-actual-brightness=true
+enable-scroll = true
+
+format = <label> <bar>
+;format = <label>
 format-underline = ${colors.adapta-cyan}
 format-foreground = ${colors.adapta-yellow}
 format-padding = 0
@@ -130,7 +143,7 @@ label-muted-padding=1
  
 ; Interval for volume increase/decrease (in percent points)
 ; Default: 5
-interval = 1
+interval = 5
 
 [module/volume]
 type = internal/alsa
@@ -311,3 +324,22 @@ content = "阮"
 content-padding=1
 content-foreground = ${colors.adapta-yellow}
 content-underline = ${colors.adapta-cyan}
+
+[module/battery]
+type = internal/battery
+
+; This is useful in case the battery never reports 100% charge
+; Default: 100
+full-at = 99
+
+; format-low once this charge percentage is reached
+; Default: 10
+; New in version 3.6.0
+low-at = 5
+
+; Use the following command to list batteries and adapters:
+; $ ls -1 /sys/class/power_supply/
+battery = BAT0
+adapter = ADP0
+
+poll-interval = 5
