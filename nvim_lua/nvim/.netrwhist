@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =2
+let g:netrw_dirhist_2='/home/chetan/gitrepos/bot-new/src'
+let g:netrw_dirhist_1='/home/chetan/gitrepos/bot-new'
+let g:netrw_dirhist_0='/home/chetan/gitrepos/bot-new/src'
+let g:netrw_dirhist_9='/home/chetan/gitrepos/bot-new'
+let g:netrw_dirhist_8='/home/chetan/Code'
+let g:netrw_dirhist_7='/home/chetan'
+let g:netrw_dirhist_6='/home/chetan/gitrepos/bot-new'
+let g:netrw_dirhist_5='/home/chetan/gitrepos/RssReader/src/main/java/main'
+let g:netrw_dirhist_4='/home/chetan/gitrepos/RssReader/src/main/java'
+let g:netrw_dirhist_3='/home/chetan/gitrepos/RssReader/src/main'
